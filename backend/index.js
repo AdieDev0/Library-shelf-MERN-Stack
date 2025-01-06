@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import { PORT, mongoDBURL } from "./config.js";
 import { Book } from "./models/bookModel.js";
+import colors from "colors";
 
 const app = express();
 
@@ -52,16 +53,15 @@ app.get("/books", async (request, response) => {
   }
 });
 
-
 // NPM START
 mongoose
   .connect(mongoDBURL)
   .then(() => {
-    console.log("APP CONNECTED TO DATABASE");
+    console.log("APP CONNECTED TO DATABASE".bgBrightGreen);
     app.listen(PORT, () => {
-      console.log(`Hello World: ${PORT}`);
+      console.log(`Hello World: ${PORT}`.bgBrightBlue);
     });
   })
   .catch((error) => {
-    console.log(error);
+    console.log(error.red);
   });
