@@ -41,6 +41,9 @@ app.post("/books", async (request, response) => {
   }
 });
 
+
+// GET ALL THE BOOKS ROUTE
+
 mongoose
   .connect(mongoDBURL)
   .then(() => {
