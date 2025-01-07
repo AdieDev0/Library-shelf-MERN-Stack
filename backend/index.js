@@ -5,7 +5,7 @@ import { PORT, mongoDBURL } from "./config.js";
 import colors from "colors";
 import { Book } from "./models/bookModel.js";
 import booksRoute from "./routes/booksRoute.js";
-
+import cors from "cors";
 const app = express();
 
 // Middleware to parse JSON
@@ -21,7 +21,7 @@ app.use(cors());
 //     methods: ['GET', 'POST', 'DELETE', 'PUT'],
 //     allowedHeaders: ['Content-type']
 //   })
-// ) 
+// )
 
 app.get("/", (request, response) => {
   console.log(request);
