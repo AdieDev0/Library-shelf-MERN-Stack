@@ -58,14 +58,12 @@ app.get("/books", async (request, response) => {
 });
 
 // GET ONE BOOK BY ID
-app.get("/books", async (request, response) => {
+app.get("/books/:id", async (request, response) => {
   try {
-    const books = await Book.find({});
-    return response.status(200).json({
-      // ADDED DATA LOOKS FORMAT LIKE 1,2,3,4
-      count: books.length,
-      data: books,
-    });
+    const { id } = request.params;
+
+    const book = await Book.findById(id);
+    return response.status(200).json(book);
   } catch (error) {
     console.log(error.message);
     response.status(500).send({ message: error.message });
