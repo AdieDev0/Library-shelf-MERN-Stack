@@ -1,5 +1,7 @@
 import express from "express";
 import { Book } from "../models/bookModel.js";
+import mongoose from "mongoose";
+
 const router = express.Router();
 
 // Route for saving a new book
@@ -25,8 +27,8 @@ router.post("/", async (request, response) => {
     await savedBook.save();
     return response.status(201).send({ message: "Book saved successfully!" });
   } catch (error) {
-    console.log(error.message);
-    response.status(500).send({ message: error.message });
+    console.error(error.message);
+    response.status(500).send({ message: "Internal server error" });
   }
 });
 
@@ -35,13 +37,12 @@ router.get("/", async (request, response) => {
   try {
     const books = await Book.find({});
     return response.status(200).json({
-      // ADDED DATA LOOKS FORMAT LIKE 1,2,3,4
       count: books.length,
       data: books,
     });
   } catch (error) {
-    console.log(error.message);
-    response.status(500).send({ message: error.message });
+    console.error(error.message);
+    response.status(500).send({ message: "Internal server error" });
   }
 });
 
@@ -50,15 +51,22 @@ router.get("/:id", async (request, response) => {
   try {
     const { id } = request.params;
 
+    if (!mongoose.isValidObjectId(id)) {
+      return response.status(400).json({ message: "Invalid Book ID" });
+    }
+
     const book = await Book.findById(id);
+    if (!book) {
+      return response.status(404).json({ message: "Book not found" });
+    }
     return response.status(200).json(book);
   } catch (error) {
-    console.log(error.message);
-    response.status(500).send({ message: error.message });
+    console.error(error.message);
+    response.status(500).send({ message: "Internal server error" });
   }
 });
 
-// UPDATEE BOOK
+// UPDATE BOOK
 router.put("/:id", async (request, response) => {
   try {
     if (
@@ -67,17 +75,24 @@ router.put("/:id", async (request, response) => {
       !request.body.publishYear
     ) {
       return response.status(400).send({
-        message: "Send all required fields: title, author and publish year",
+        message: "Send all required fields: title, author and publishYear",
       });
     }
+
     const { id } = request.params;
-    const result = await Book.findByIdAndUpdate(id, request.body);
-    if (!result) {
-      return response.status(404).json({ message: "Book Not Found" });
+
+    if (!mongoose.isValidObjectId(id)) {
+      return response.status(400).json({ message: "Invalid Book ID" });
     }
-    return response.status(200).send({ message: "Book Update Sucessfully!" });
+
+    const result = await Book.findByIdAndUpdate(id, request.body, { new: true });
+    if (!result) {
+      return response.status(404).json({ message: "Book not found" });
+    }
+    return response.status(200).send({ message: "Book updated successfully!" });
   } catch (error) {
-    response.status(500).send({ message: error.message });
+    console.error(error.message);
+    response.status(500).send({ message: "Internal server error" });
   }
 });
 
@@ -85,12 +100,20 @@ router.put("/:id", async (request, response) => {
 router.delete("/:id", async (request, response) => {
   try {
     const { id } = request.params;
+
+    if (!mongoose.isValidObjectId(id)) {
+      return response.status(400).json({ message: "Invalid Book ID" });
+    }
+
     const result = await Book.findByIdAndDelete(id);
     if (!result) {
-      return response.status(404).json({ message: "Book Not Found." });
+      return response.status(404).json({ message: "Book not found." });
     }
-    return response.status(200).send({ message: "Book Deleted SuccessFully!" });
+    return response.status(200).send({ message: "Book deleted successfully!" });
   } catch (error) {
-    response.status(500).send({ message: error.message });
+    console.error(error.message);
+    response.status(500).send({ message: "Internal server error" });
   }
 });
+
+export default router;

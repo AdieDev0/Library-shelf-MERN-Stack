@@ -1,7 +1,6 @@
 import express, { response } from "express";
 import mongoose from "mongoose";
 import { PORT, mongoDBURL } from "./config.js";
-import { Book } from "./models/bookModel.js";
 // Colors for npm start highlight colors
 import colors from "colors";
 import { Book } from "./models/bookModel.js";
