@@ -11,6 +11,18 @@ const app = express();
 // Middleware to parse JSON
 app.use(express.json());
 
+// CORS MIDDLEWARE
+app.use(cors());
+
+// ALLOW CUSTOM ORIGIN
+// app.use(
+//   cors({
+//     origin: '',
+//     methods: ['GET', 'POST', 'DELETE', 'PUT'],
+//     allowedHeaders: ['Content-type']
+//   })
+// ) 
+
 app.get("/", (request, response) => {
   console.log(request);
   return response.status(234).send("Welcome");
