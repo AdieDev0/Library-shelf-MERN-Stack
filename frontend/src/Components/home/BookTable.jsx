@@ -1,51 +1,8 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Spinner from "../Components/Spinner";
-import { Link } from "react-router-dom";
-import { AiOutlineEdit } from "react-icons/ai";
-import { BsInfoCircle } from "react-icons/bs";
-import { MdOutlineAddBox, MdOutlineDelete } from "react-icons/md";
-import BookCard from "../Components/home/BookCard";
-import BookTable from "../Components/home/BookTable";
-const Home = () => {
-  // `useState` is used to manage the component's local state.
-  // Here, `books` holds the fetched books data, and `loading` tracks the loading state.
-  const [books, setBooks] = useState([]);
-  const [loading, setLoading] = useState(false);
+import React from 'react'
 
-  // `useEffect` runs the provided function after the component renders.
-  // It is used here to fetch data when the component mounts.
-  useEffect(() => {
-    setLoading(true); // Set loading to true before fetching data.
-
-    // `axios` is used to perform an HTTP GET request to fetch books data from the server.
-    axios
-      .get("http://localhost:7777/books")
-      .then((response) => {
-        // On success, update the `books` state with the fetched data.
-        setBooks(response.data.data);
-        setLoading(false); // Set loading to false once data is fetched.
-      })
-      .catch((error) => {
-        console.error(error); // Log the error for debugging.
-        setLoading(false); // Ensure loading state is reset in case of an error.
-      });
-  }, []); // Empty dependency array ensures this runs only once when the component mounts.
-
+const BookTable = () => {
   return (
-    <div className="p-4">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl my-8">Books List</h1>
-        {/* Link to navigate to the book creation page */}
-        <Link to="/books/create">
-          <MdOutlineAddBox className="text-sky-800 text-4xl" />
-        </Link>
-      </div>
-      {/* Show spinner if data is loading, otherwise display the table */}
-      {loading ? (
-        <Spinner />
-      ) : (
-        <table className="w-full border-separate border-spacing-2">
+    <table className="w-full border-separate border-spacing-2">
           <thead>
             <tr>
               <th className="border border-slate-600 rounded-md">No</th>
@@ -93,9 +50,7 @@ const Home = () => {
             ))}
           </tbody>
         </table>
-      )}
-    </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default BookTable
