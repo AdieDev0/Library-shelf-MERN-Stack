@@ -1,9 +1,13 @@
-import React from 'react'
+import { useState } from "react";
+import BackButton from "../Components/BackButton";
+import Spinner from "../Components/Spinner";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
 
 const DeleteBook = () => {
-  return (
-    <div>DeleteBook</div>
-  )
-}
+  const [loading, setLoading] = useState(false);
 
-export default DeleteBook
+  return <div>Delete Book</div>;
+};
+
+export default DeleteBook;
