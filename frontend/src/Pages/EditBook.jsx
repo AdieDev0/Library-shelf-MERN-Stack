@@ -3,7 +3,7 @@ import BackButton from "../Components/BackButton";
 import Spinner from "../Components/Spinner";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-const { enqueueSnackbar } = useSnackbar(); //notiStack
+import { useSnackbar } from "notistack";
 
 const EditBook = () => {
   // States for managing form inputs
@@ -15,6 +15,7 @@ const EditBook = () => {
   const { id } = useParams(); // Retrieve the book ID from the URL parameters
   const navigate = useNavigate(); // Used for navigation after successfully editing the book
 
+  const { enqueueSnackbar } = useSnackbar(); //notiStack
   useEffect(() => {
     // Fetch existing book data when the component is mounted
     setLoading(true); // Start loading spinner
@@ -48,11 +49,13 @@ const EditBook = () => {
       .put(`http://localhost:7777/books/${id}`, data)
       .then(() => {
         setLoading(false); // Stop loading spinner once the request is successful
+        enqueueSnackbar("Book Edited Successfully", { varient: "success" });
         navigate("/"); // Navigate back to the home page
       })
       .catch((error) => {
         setLoading(false); // Stop loading spinner in case of an error
-        alert("An error happened. Please check the console."); // Notify user about the error
+        // alert("An error happened. Please check the console."); // Notify user about the error
+        enqueueSnackbar(error, { varient: "error" });
         console.error(error); // Log the error for debugging
       });
   };
