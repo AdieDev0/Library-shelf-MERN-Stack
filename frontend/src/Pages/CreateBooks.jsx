@@ -3,6 +3,7 @@ import BackButton from "../Components/BackButton";
 import Spinner from "../Components/Spinner";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 const CreateBooks = () => {
   // States for managing form inputs
@@ -10,7 +11,7 @@ const CreateBooks = () => {
   const [author, setAuthor] = useState(""); // To store the author's name
   const [publishYear, setPublishYear] = useState(""); // To store the year of publication
   const [loading, setLoading] = useState(false); // To show the loading spinner during the save process
-
+  const { enqueueSnackbar } = useSnackbar(); //notiStack
   const navigate = useNavigate(); // Used for navigation after successfully saving the book
 
   // Function to handle saving the book
@@ -28,11 +29,13 @@ const CreateBooks = () => {
       .post(`http://localhost:7777/books`, data)
       .then(() => {
         setLoading(false); // Stop showing spinner once the request is successful
+        enqueueSnackbar("Book Created Successfully", { variant: "success" });
         navigate("/"); // Navigate to the home page
       })
       .catch((error) => {
         setLoading(false); // Stop showing spinner in case of an error
-        alert("An error happened. Please check the console."); // Notify the user about the error
+        // alert("An error happened. Please check the console."); // Notify the user about the error
+        enqueueSnackbar("Error", { variant: "error" });
         console.error(error); // Log the error for debugging
       });
   };
