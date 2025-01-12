@@ -1,58 +1,66 @@
 import { Link } from "react-router-dom";
 import { AiOutlineEdit } from "react-icons/ai";
 import { BsInfoCircle } from "react-icons/bs";
-import { MdOutlineAddBox, MdOutlineDelete } from "react-icons/md";
+import { MdOutlineDelete } from "react-icons/md";
 
 const BookTable = ({ books }) => {
   return (
-    <table className="w-full border-separate border-spacing-2">
-      <thead>
-        <tr>
-          <th className="border border-slate-600 rounded-md">No</th>
-          <th className="border border-slate-600 rounded-md">Title</th>
-          <th className="border border-slate-600 rounded-md max-md:hidden">
-            Author
-          </th>
-          <th className="border border-slate-600 rounded-md max-md:hidden">
-            Publish Year
-          </th>
-          <th className="border border-slate-600 rounded-md">Operations</th>
-        </tr>
-      </thead>
-      <tbody>
-        {/* Use `books.map` to iterate over the `books` array and render rows */}
-        {books.map((book, index) => (
-          <tr key={book._id} className="h-8">
-            <td className="border border-slate-700 rounded-md text-center">
-              {index + 1}
-            </td>
-            <td className="border border-slate-700 rounded-md text-center">
-              {book.title}
-            </td>
-            <td className="border border-slate-700 rounded-md text-center max-md:hidden">
-              {book.author}
-            </td>
-            <td className="border border-slate-700 rounded-md text-center max-md:hidden">
-              {book.publishYear}
-            </td>
-            <td className="border border-slate-700 rounded-md text-center">
-              <div className="flex justify-center gap-x-4">
-                {/* Links to view, edit, and delete book details */}
-                <Link to={`/books/details/${book._id}`}>
-                  <BsInfoCircle className="text-2xl text-green-800" />
-                </Link>
-                <Link to={`/books/edit/${book._id}`}>
-                  <AiOutlineEdit className="text-2xl text-yellow-800" />
-                </Link>
-                <Link to={`/books/delete/${book._id}`}>
-                  <MdOutlineDelete className="text-2xl text-red-800" />
-                </Link>
-              </div>
-            </td>
+    <div className="overflow-x-auto">
+      <table className="w-full border-collapse bg-white shadow-lg rounded-lg overflow-hidden">
+        <thead className="bg-gray-100">
+          <tr>
+            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">No</th>
+            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Title</th>
+            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700 max-md:hidden">
+              Author
+            </th>
+            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700 max-md:hidden">
+              Publish Year
+            </th>
+            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Actions</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {books.map((book, index) => (
+            <tr
+              key={book._id}
+              className={`border-t last:border-b hover:bg-gray-50 transition-colors ${
+                index % 2 === 0 ? "bg-gray-50" : "bg-white"
+              }`}
+            >
+              <td className="px-4 py-2 text-sm text-gray-600">{index + 1}</td>
+              <td className="px-4 py-2 text-sm text-gray-600">{book.title}</td>
+              <td className="px-4 py-2 text-sm text-gray-600 max-md:hidden">{book.author}</td>
+              <td className="px-4 py-2 text-sm text-gray-600 max-md:hidden">
+                {book.publishYear}
+              </td>
+              <td className="px-4 py-2 text-sm text-gray-600">
+                <div className="flex items-center gap-3">
+                  <Link
+                    to={`/books/details/${book._id}`}
+                    className="text-green-500 hover:text-green-700 transition-colors"
+                  >
+                    <BsInfoCircle size={20} />
+                  </Link>
+                  <Link
+                    to={`/books/edit/${book._id}`}
+                    className="text-yellow-500 hover:text-yellow-700 transition-colors"
+                  >
+                    <AiOutlineEdit size={20} />
+                  </Link>
+                  <button
+                    className="text-red-500 hover:text-red-700 transition-colors"
+                    onClick={() => alert(`Delete book: ${book.title}`)}
+                  >
+                    <MdOutlineDelete size={20} />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
