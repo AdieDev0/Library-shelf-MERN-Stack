@@ -5,49 +5,63 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { BsInfoCircle } from "react-icons/bs";
 import { MdOutlineDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import BookModal from "./BookModal";
 
 const BookSingleCard = ({ book }) => {
   const [showModal, setShowModal] = useState(false);
+
   return (
-    <div
+    <motion.div
       key={book._id}
-      className="border-2 border-gray-500 rounded-lg px-4 py-2 m-4 relative hover:shadow-xl"
+      className="bg-white shadow-lg rounded-lg p-6 flex flex-col gap-4 hover:shadow-xl transition-shadow duration-300 relative"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.3 }}
     >
-      <h2 className="absolute top-1 right-2 px-4 py-1 bg-red-300 rounded-lg">
+      {/* Publish Year */}
+      <div className="absolute top-3 right-4 px-3 py-1 bg-red-100 text-red-500 text-sm font-semibold rounded-lg">
         {book.publishYear}
-      </h2>
-      <h4 className="my-2 text-gray-500">{book._id}</h4>
-      <div className="flex justify-start items-center gap-x-2">
-        <PiBookOpenTextLight className="text-red-300 text-2xl" />
-        <h2 className="my-1">{book.title}</h2>
-      </div>
-      <div className="flex justify-start items-center gap-x-2">
-        <BiUserCircle className="text-red-300 text-2xl" />
-        <h2 className="my-1">{book.author}</h2>
-      </div>
-      <div className="flex justify-between items-center gap-x-2 mt-4 p-4">
-        <BiShow
-          className="text-3xl text-blue-800 hover:text-black cursor-pointer"
-          onClick={() => {
-            setShowModal(true);
-          }}
-        />
-        <Link to={`/books/details/${book._id}`}>
-          <BsInfoCircle className="text-2xl text-green-800 hover:text-black" />
-        </Link>
-        <Link to={`/books/edit/${book._id}`}>
-          <AiOutlineEdit className="text-2xl text-yellow-600 hover:text-black" />
-        </Link>
-        <Link to={`/books/delete/${book._id}`}>
-          <MdOutlineDelete className="text-2xl text-red-600 hover:text-black" />
-        </Link>
       </div>
 
-      {showModal && (
-        <BookModal book={book} onClose={() => setShowModal(false)} />
-      )}
-    </div>
+      {/* Book Title */}
+      <div className="flex items-center gap-2 text-gray-800">
+        <PiBookOpenTextLight size={24} className="text-red-500" />
+        <h2 className="font-medium text-lg truncate">{book.title}</h2>
+      </div>
+
+      {/* Author */}
+      <div className="flex items-center gap-2 text-gray-600">
+        <BiUserCircle size={20} className="text-red-500" />
+        <p className="text-sm truncate">{book.author}</p>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex justify-between items-center gap-4 mt-auto">
+        <BiShow
+          size={28}
+          className="text-blue-600 hover:text-blue-800 cursor-pointer"
+          onClick={() => setShowModal(true)}
+        />
+        <Link to={`/books/details/${book._id}`}>
+          <BsInfoCircle size={22} className="text-green-600 hover:text-green-800" />
+        </Link>
+        <Link to={`/books/edit/${book._id}`}>
+          <AiOutlineEdit size={22} className="text-yellow-600 hover:text-yellow-800" />
+        </Link>
+        <button>
+          <MdOutlineDelete size={22} className="text-red-600 hover:text-red-800" />
+        </button>
+      </div>
+
+      {/* Modal */}
+      <AnimatePresence>
+        {showModal && (
+          <BookModal book={book} onClose={() => setShowModal(false)} />
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };
 
