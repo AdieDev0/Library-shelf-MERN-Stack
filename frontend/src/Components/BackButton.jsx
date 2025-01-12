@@ -6,8 +6,9 @@ const BackButton = ({ destination = "/" }) => {
       <Link
         to={destination}
         className="bg-sky-800 text-white px-4 py-1 rounded-lg w-fit"
-      ></Link>
-      <BsArrowLeft className="text-2xl" />
+      >
+        <BsArrowLeft className="text-2xl" />
+      </Link>
     </div>
   );
 };
