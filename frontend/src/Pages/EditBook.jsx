@@ -6,106 +6,116 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 
 const EditBook = () => {
-  // States for managing form inputs
-  const [title, setTitle] = useState(""); // To store the book title
-  const [author, setAuthor] = useState(""); // To store the author's name
-  const [publishYear, setPublishYear] = useState(""); // To store the year of publication
-  const [loading, setLoading] = useState(false); // To show the loading spinner during API operations
+  const [title, setTitle] = useState(""); // Store book title
+  const [author, setAuthor] = useState(""); // Store book author
+  const [publishYear, setPublishYear] = useState(""); // Store publish year
+  const [loading, setLoading] = useState(false); // Loading state for API calls
 
-  const { id } = useParams(); // Retrieve the book ID from the URL parameters
-  const navigate = useNavigate(); // Used for navigation after successfully editing the book
+  const { id } = useParams(); // Get book ID from URL params
+  const navigate = useNavigate(); // Navigation after edit success
+  const { enqueueSnackbar } = useSnackbar(); // Snackbar for notifications
 
-  const { enqueueSnackbar } = useSnackbar(); //notiStack
   useEffect(() => {
-    // Fetch existing book data when the component is mounted
-    setLoading(true); // Start loading spinner
+    setLoading(true);
     axios
-      .get(`http://localhost:7777/books/${id}`) // API call to fetch book details by ID
+      .get(`http://localhost:7777/books/${id}`)
       .then((response) => {
-        // Populate form fields with fetched data
-        setAuthor(response.data.author);
-        setPublishYear(response.data.publishYear);
-        setTitle(response.data.title);
-        setLoading(false); // Stop loading spinner
+        const { title, author, publishYear } = response.data;
+        setTitle(title);
+        setAuthor(author);
+        setPublishYear(publishYear);
+        setLoading(false);
       })
       .catch((error) => {
-        setLoading(false); // Stop loading spinner in case of an error
-        alert("An error happened. Please check the console."); // Notify user about the error
-        console.error(error); // Log the error for debugging
+        setLoading(false);
+        enqueueSnackbar("Failed to fetch book details. Please try again.", {
+          variant: "error",
+        });
+        console.error(error);
       });
-  }, [id]); // The effect runs only once and when the `id` changes
+  }, [id]);
 
-  // Function to handle editing the book
   const handleEditBook = () => {
-    const data = {
-      title,
-      author,
-      publishYear,
-    };
+    const data = { title, author, publishYear };
 
-    setLoading(true); // Start loading spinner
-    // Use axios to send a PUT request to update the book
+    setLoading(true);
     axios
       .put(`http://localhost:7777/books/${id}`, data)
       .then(() => {
-        setLoading(false); // Stop loading spinner once the request is successful
-        enqueueSnackbar("Book Edited Successfully", { varient: "success" });
-        navigate("/"); // Navigate back to the home page
+        setLoading(false);
+        enqueueSnackbar("Book updated successfully!", { variant: "success" });
+        navigate("/");
       })
       .catch((error) => {
-        setLoading(false); // Stop loading spinner in case of an error
-        // alert("An error happened. Please check the console."); // Notify user about the error
-        enqueueSnackbar(error, { varient: "error" });
-        console.error(error); // Log the error for debugging
+        setLoading(false);
+        enqueueSnackbar("Failed to update book. Please try again.", {
+          variant: "error",
+        });
+        console.error(error);
       });
   };
 
   return (
     <div className="p-4">
-      {/* BackButton component allows navigation back to the previous page */}
       <BackButton />
-      <h1 className="text-3xl my-4">Edit Book</h1>
-      {/* Show a loading spinner if `loading` is true */}
-      {loading && <Spinner />}
-      <div className="flex flex-col border-2 border-sky-400 rounded-xl w-[600px] p-4 mx-auto">
-        {/* Input field for the book title */}
-        <div className="my-4">
-          <label className="text-xl mr-4 text-gray-500">Title</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)} // Update state when user types
-            className="border-2 border-gray-500 px-4 py-2 w-full"
-          />
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">Edit Book</h1>
+      {loading ? (
+        <div className="flex justify-center items-center mt-6">
+          <Spinner />
         </div>
-        {/* Input field for the book author */}
-        <div className="my-4">
-          <label className="text-xl mr-4 text-gray-500">Author</label>
-          <input
-            type="text"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)} // Update state when user types
-            className="border-2 border-gray-500 px-4 py-2 w-full"
-          />
+      ) : (
+        <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md">
+          {/* Title Input */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Title
+            </label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
+              placeholder="Enter book title"
+            />
+          </div>
+
+          {/* Author Input */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Author
+            </label>
+            <input
+              type="text"
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
+              placeholder="Enter author name"
+            />
+          </div>
+
+          {/* Publish Year Input */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Publish Year
+            </label>
+            <input
+              type="text"
+              value={publishYear}
+              onChange={(e) => setPublishYear(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
+              placeholder="Enter year of publication"
+            />
+          </div>
+
+          {/* Save Button */}
+          <button
+            onClick={handleEditBook}
+            className="w-full bg-sky-500 text-white font-semibold py-2 rounded-lg hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-400 transition-colors"
+          >
+            Save
+          </button>
         </div>
-        {/* Input field for the publish year */}
-        <div className="my-4">
-          <label className="text-xl mr-4 text-gray-500">Publish Year</label>
-          <input
-            type="text"
-            value={publishYear}
-            onChange={(e) => setPublishYear(e.target.value)} // Update state when user types
-            className="border-2 border-gray-500 px-4 py-2 w-full"
-          />
-        </div>
-        {/* Button to save the book */}
-        <button
-          className="p-2 bg-sky-300 mt-8 hover:bg-sky-400 text-white font-semibold rounded"
-          onClick={handleEditBook}
-        >
-          Save
-        </button>
-      </div>
+      )}
     </div>
   );
 };
