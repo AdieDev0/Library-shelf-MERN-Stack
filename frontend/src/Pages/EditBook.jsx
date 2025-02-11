@@ -6,14 +6,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 
 const EditBook = () => {
-  const [title, setTitle] = useState(""); // Store book title
-  const [author, setAuthor] = useState(""); // Store book author
-  const [publishYear, setPublishYear] = useState(""); // Store publish year
-  const [loading, setLoading] = useState(false); // Loading state for API calls
+  const [title, setTitle] = useState(""); 
+  const [author, setAuthor] = useState(""); 
+  const [publishYear, setPublishYear] = useState(""); 
+  const [loading, setLoading] = useState(false); 
 
-  const { id } = useParams(); // Get book ID from URL params
-  const navigate = useNavigate(); // Navigation after edit success
-  const { enqueueSnackbar } = useSnackbar(); // Snackbar for notifications
+  const { id } = useParams(); 
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar(); 
 
   useEffect(() => {
     setLoading(true);
