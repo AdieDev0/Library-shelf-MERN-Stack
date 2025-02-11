@@ -24,7 +24,9 @@ const DeleteBook = () => {
       })
       .catch((error) => {
         setLoading(false);
-        enqueueSnackbar("Error deleting the book. Please try again.", { variant: "error" });
+        enqueueSnackbar("Error deleting the book. Please try again.", {
+          variant: "error",
+        });
         console.error(error);
       });
   };
@@ -44,7 +46,9 @@ const DeleteBook = () => {
         </div>
       )}
       <div className="flex flex-col items-center border-2 border-red-500 bg-red-50 rounded-xl w-full max-w-lg p-8 mx-auto shadow-lg">
-        <h3 className="text-2xl font-semibold text-gray-700 mb-6">Are you sure you want to delete this book?</h3>
+        <h3 className="text-2xl font-semibold text-gray-700 mb-6">
+          Are you sure you want to delete this book?
+        </h3>
         <div className="flex gap-4 mb-6">
           <button
             onClick={handleDeleteBook}
