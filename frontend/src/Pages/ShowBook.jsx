@@ -27,7 +27,9 @@ const ShowBook = () => {
   return (
     <div className="p-4 max-w-4xl mx-auto">
       <BackButton />
-      <h1 className="text-2xl font-semibold text-gray-800 my-6">Book Details</h1>
+      <h1 className="text-2xl font-semibold text-gray-800 my-6">
+        Book Details
+      </h1>
 
       {loading ? (
         <motion.div
@@ -51,8 +53,14 @@ const ShowBook = () => {
             { label: "Title", value: book.title },
             { label: "Author", value: book.author },
             { label: "Publish Year", value: book.publishYear },
-            { label: "Created Time", value: new Date(book.createdAt).toLocaleString() },
-            { label: "Last Update Time", value: new Date(book.updatedAt).toLocaleString() },
+            {
+              label: "Created Time",
+              value: new Date(book.createdAt).toLocaleString(),
+            },
+            {
+              label: "Last Update Time",
+              value: new Date(book.updatedAt).toLocaleString(),
+            },
           ].map(({ label, value }) => (
             <div key={label} className="flex justify-between text-gray-700">
               <span className="font-medium">{label}</span>
